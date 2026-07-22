@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LS26 共创观察平台 Demo</title>
+  <meta
+    name="description"
+    content="LS26 户外观察与叙事写作平台 demo，展示孩子和设备在户外共创观察，再同步到平台生成观察卡、故事积木和写作草稿。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800&family=Noto+Serif+SC:wght@600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <nav class="topbar">
+        <div class="brand">
+          <span class="brand-mark">LS26</span>
+          <div>
+            <p class="eyebrow">Outdoor Co-writing Platform</p>
+            <h1>孩子和设备在户外共创观察</h1>
+          </div>
+        </div>
+        <div class="sync-pill">
+          <span class="sync-dot"></span>
+          <span id="syncStatusText">LS26 已同步最近一次观察会话</span>
+        </div>
+      </nav>
+
+      <div class="hero-grid">
+        <section class="hero-copy card">
+          <p class="section-kicker">平台定位</p>
+          <h2>不是让孩子直接写作文，而是把真实观察一步步搭成故事。</h2>
+          <p class="hero-text">
+            LS26 在户外陪孩子提问、追问、记录图片和回答；回到平台后，这些真实素材会自动整理成观察卡、故事积木、写作提纲和短作文草稿。
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#timeline">查看同步会话</a>
+            <a class="button button-secondary" href="#aiStudio">打开 AI 调整台</a>
+            <a class="button button-secondary" href="#studio">查看写作工作台</a>
+          </div>
+          <ul class="hero-metrics">
+            <li>
+              <strong>设备端</strong>
+              <span>拍照 / 语音 / 现场追问</span>
+            </li>
+            <li>
+              <strong>平台端</strong>
+              <span>观察卡 / 故事积木 / 提纲 / 草稿</span>
+            </li>
+            <li>
+              <strong>展示重点</strong>
+              <span>共创观察，而不是 AI 代写</span>
+            </li>
+          </ul>
+        </section>
+
+        <aside class="hero-preview card">
+          <p class="section-kicker">今日演示路径</p>
+          <ol class="journey-list">
+            <li>孩子用 LS26 拍下叶子、天空或小动物</li>
+            <li>设备即时提出观察问题并接收孩子回答</li>
+            <li>云端同步完整会话到平台</li>
+            <li>平台自动生成观察卡与故事积木</li>
+            <li>一键整理为提纲与短作文草稿</li>
+          </ol>
+          <div class="device-tape">
+            <div class="device-screen">
+              <span class="device-tag">LS26</span>
+              <p id="devicePreviewObject">黄色的叶子</p>
+              <small id="devicePreviewReply">“它像要去旅行的小船。”</small>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </header>
+
+    <main>
+      <section class="card task-panel" id="taskPanel">
+        <div class="panel-head">
+          <div>
+            <p class="section-kicker">00 / 观察任务设计台</p>
+            <h3>先生成观察任务、观察卡和新的 session，再带孩子出去探索</h3>
+          </div>
+          <div class="panel-meta">
+            <div id="taskStatusText">先填写任务信息，我会自动生成一张可打印的观察卡和一个新的 session 草稿。</div>
+            <small>这一步适合老师或家长在活动开始前完成。</small>
+          </div>
+        </div>
+
+        <div class="task-grid">
+          <section class="task-form">
+            <div class="ai-field-grid">
+              <label class="field">
+                <span>观察主题</span>
+                <input id="taskTitleInput" type="text" placeholder="例如：雨后叶子的秘密">
+              </label>
+              <label class="field">
+                <span>观察环境</span>
+                <input id="taskEnvironmentInput" type="text" placeholder="例如：校园花坛、操场边、小区公园">
+              </label>
+              <label class="field">
+                <span>孩子年龄段</span>
+                <select id="taskAgeSelect">
+                  <option value="6-8">6–8 岁</option>
+                  <option value="9-10">9–10 岁</option>
+                  <option value="11-12">11–12 岁</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>任务日期</span>
+                <input id="taskDateInput" type="date">
+              </label>
+              <label class="field">
+                <span>任务时间</span>
+                <input id="taskTimeInput" type="time">
+              </label>
+              <label class="field">
+                <span>重点观察什么</span>
+                <input id="taskFocusInput" type="text" placeholder="例如：声音、变化、痕迹、颜色、位置关系">
+              </label>
+              <label class="field field-wide">
+                <span>老师 / 家长补充说明（可选）</span>
+                <textarea id="taskNoteInput" rows="3" placeholder="例如：今天尽量让孩子多说“我为什么想保存它”，少给标准答案。"></textarea>
+              </label>
+              <label class="field field-wide">
+                <span>LS26 开场提示</span>
+                <textarea id="taskDeviceIntroInput" rows="3" placeholder="例如：今天我们去做一次慢观察。先别急着拍，先看十秒。"></textarea>
+              </label>
+              <label class="field field-wide">
+                <span>LS26 找到观察点后的提示</span>
+                <textarea id="taskDeviceObserveInput" rows="3" placeholder="例如：如果你已经找到一个想停下来的地方，先看看哪里在变化。"></textarea>
+              </label>
+              <label class="field field-wide">
+                <span>LS26 采集后的追问</span>
+                <textarea id="taskDeviceCaptureInput" rows="3" placeholder="例如：现在你可以拍照或录音了。告诉我，你为什么想保存它？"></textarea>
+              </label>
+              <label class="field field-wide">
+                <span>LS26 结束提醒</span>
+                <textarea id="taskDeviceClosingInput" rows="3" placeholder="例如：这次观察先到这里。回教室后，我们再把你的发现变成文字。"></textarea>
+              </label>
+            </div>
+
+            <div class="ai-actions">
+              <button class="button button-primary" id="generateTaskCardButton" type="button">生成观察卡</button>
+              <button class="button button-secondary" id="createTaskSessionButton" type="button">创建新的观察 session</button>
+              <button class="button button-secondary" id="startDeviceSessionButton" type="button">让 LS26 开始观察</button>
+              <button class="button button-ghost" id="stopDeviceSessionButton" type="button">结束并导回写作</button>
+              <button class="button button-secondary" id="downloadTaskJsonButton" type="button">下载任务 JSON</button>
+              <button class="button button-ghost" id="printTaskCardButton" type="button">打印 / 导出 PDF</button>
+            </div>
+          </section>
+
+          <aside class="task-preview">
+            <div class="ai-preview-box">
+              <p class="mini-label">Session 摘要</p>
+              <div class="task-session-summary" id="taskSessionSummary"></div>
+            </div>
+
+            <div class="ai-preview-box">
+              <p class="mini-label">设备桥状态</p>
+              <div class="task-session-summary" id="deviceBridgeSummary"></div>
+            </div>
+
+            <div class="ai-preview-box">
+              <p class="mini-label">现场提示包</p>
+              <div class="task-prompt-list" id="taskPromptList"></div>
+            </div>
+          </aside>
+        </div>
+
+        <section class="task-print-card" id="taskPrintCard">
+          <div class="task-card-head">
+            <div>
+              <p class="mini-label">可打印观察卡</p>
+              <h3 id="taskCardTitle">慢观察任务卡</h3>
+            </div>
+            <div class="task-card-meta" id="taskCardMeta"></div>
+          </div>
+
+          <div class="task-card-grid">
+            <article class="task-card-block">
+              <p class="mini-label">开放任务</p>
+              <p id="taskMissionText"></p>
+            </article>
+            <article class="task-card-block">
+              <p class="mini-label">Look / Capture / Explain</p>
+              <div id="taskPhaseList"></div>
+            </article>
+            <article class="task-card-block">
+              <p class="mini-label">现场追问</p>
+              <div id="taskQuestionList"></div>
+            </article>
+            <article class="task-card-block">
+              <p class="mini-label">带队提醒</p>
+              <div id="taskTeacherTips"></div>
+            </article>
+            <article class="task-card-block">
+              <p class="mini-label">LS26 设备脚本</p>
+              <div id="taskDeviceScripts"></div>
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <section class="card import-panel" id="importPanel">
+        <div class="panel-head">
+          <div>
+            <p class="section-kicker">01 / MVP 导入站</p>
+            <h3>把 LS26 采集记录带回电脑，立刻生成观察卡和写作草稿</h3>
+          </div>
+          <div class="panel-meta">
+            <div id="importStatusText">当前使用演示数据。你可以导入一条真实观察记录覆盖演示会话。</div>
+            <small>第一版支持：手动填写、粘贴 JSON、附带 1 张图片和 1 段音频。</small>
+          </div>
+        </div>
+
+        <div class="import-grid">
+          <section class="import-form">
+            <div class="age-mode-note" id="importAgeModeNote"></div>
+            <div class="ai-field-grid">
+              <label class="field age-typing-field" id="importSessionLabelField">
+                <span>会话名称</span>
+                <input id="importSessionLabel" type="text" placeholder="例如：校园角落里的叶子">
+              </label>
+              <label class="field">
+                <span>年龄层</span>
+                <select id="importAgeSelect">
+                  <option value="6-8">6–8 岁</option>
+                  <option value="9-10">9–10 岁</option>
+                  <option value="11-12">11–12 岁</option>
+                </select>
+              </label>
+              <label class="field age-typing-field" id="importPlaceField">
+                <span>观察地点</span>
+                <input id="importPlaceInput" type="text" placeholder="例如：学校花坛旁">
+              </label>
+              <label class="field age-typing-field" id="importObjectField">
+                <span>观察对象</span>
+                <input id="importObjectInput" type="text" placeholder="例如：一片被雨打湿的叶子">
+              </label>
+              <label class="field field-wide age-typing-field" id="importChildReplyField">
+                <span>孩子原话 / 为什么想保存它</span>
+                <textarea id="importChildReplyInput" rows="3" placeholder="例如：它像一只刚停下来的小船，我想知道风会不会把它吹走。"></textarea>
+              </label>
+              <label class="field age-typing-field" id="importSensoryField">
+                <span>感官细节</span>
+                <input id="importSensoryInput" type="text" placeholder="例如：边缘卷起来，颜色深浅不一样">
+              </label>
+              <label class="field age-typing-field" id="importImaginationField">
+                <span>想象 / 写作种子</span>
+                <input id="importImaginationInput" type="text" placeholder="例如：像准备继续旅行的小船">
+              </label>
+            </div>
+
+            <div class="ai-field-grid">
+              <label class="field field-wide age-typing-field" id="importJsonTextField">
+                <span>LS26 导出 JSON（可选，粘贴后可覆盖上面字段）</span>
+                <textarea id="importJsonText" rows="6" placeholder='例如：{"sessionLabel":"校园叶子","object":"黄色的叶子","childReply":"像小船。"}'></textarea>
+              </label>
+              <label class="field">
+                <span>导入 JSON 文件（可选）</span>
+                <input id="importJsonFile" type="file" accept=".json,application/json">
+              </label>
+              <label class="field">
+                <span>观察图片（可选）</span>
+                <input id="importImageFile" type="file" accept="image/*">
+              </label>
+              <label class="field">
+                <span>现场音频（可选）</span>
+                <input id="importAudioFile" type="file" accept="audio/*">
+              </label>
+            </div>
+
+            <div class="ai-actions">
+              <button class="button button-primary" id="importSessionButton" type="button">生成导入会话</button>
+              <button class="button button-secondary" id="loadSampleImportButton" type="button">载入示例 JSON</button>
+              <button class="button button-ghost" id="clearImportedSessionsButton" type="button">清空我导入的会话</button>
+            </div>
+          </section>
+
+          <aside class="import-preview">
+            <div class="ai-preview-box">
+              <p class="mini-label">当前导入摘要</p>
+              <div class="import-summary" id="importSummary"></div>
+            </div>
+
+            <div class="ai-preview-box">
+              <p class="mini-label">媒体预览</p>
+              <div class="import-media-preview" id="importMediaPreview"></div>
+            </div>
+
+            <div class="ai-preview-box">
+              <p class="mini-label">推荐数据格式</p>
+              <div class="import-format-hint">
+                <p>建议最少包含：`sessionLabel`、`age`、`place`、`object`、`childReply`。</p>
+                <p>如果后面要从 LS26 自动同步，第一版就沿用这个结构最省力。</p>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="control-bar card">
+        <div class="control-group">
+          <span class="control-label">模式切换</span>
+          <div class="segmented" id="modeSwitch">
+            <button class="segmented-item active" data-mode="child">儿童互动模式</button>
+            <button class="segmented-item" data-mode="guide">教师/家长/展示模式</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <span class="control-label">年龄层</span>
+          <div class="segmented" id="ageSwitch">
+            <button class="segmented-item active" data-age="6-8">6–8 岁</button>
+            <button class="segmented-item" data-age="9-10">9–10 岁</button>
+            <button class="segmented-item" data-age="11-12">11–12 岁</button>
+          </div>
+        </div>
+
+        <div class="control-group control-group-sessions">
+          <span class="control-label">同步会话</span>
+          <div class="chip-list" id="sessionList"></div>
+        </div>
+      </section>
+
+      <section class="card ai-studio-panel" id="aiStudio">
+        <div class="panel-head">
+          <div>
+            <p class="section-kicker">AI / 调整台</p>
+            <h3>让这页不只是展示，而是能现场智能生成和调整</h3>
+          </div>
+          <div class="panel-meta">
+            <div id="aiStudioStatus">当前使用 LS26 同步记录作为生成底稿</div>
+            <small>你可以直接改对象、场景、语气和写作目标</small>
+          </div>
+        </div>
+
+        <div class="ai-studio-grid">
+          <section class="ai-form">
+            <div class="age-mode-note" id="aiAgeModeNote"></div>
+            <div class="ai-field-grid">
+              <label class="field age-typing-field" id="aiObjectField">
+                <span>观察对象</span>
+                <input id="aiObjectInput" type="text" placeholder="例如：一片黄色的叶子">
+              </label>
+              <label class="field age-typing-field" id="aiPlaceField">
+                <span>观察地点</span>
+                <input id="aiPlaceInput" type="text" placeholder="例如：公园小路边">
+              </label>
+              <label class="field field-wide age-typing-field" id="aiChildReplyField">
+                <span>孩子原话 / 回应</span>
+                <textarea id="aiChildReplyInput" rows="3" placeholder="例如：像一只要去旅行的小船。"></textarea>
+              </label>
+            </div>
+
+            <div class="ai-field-grid">
+              <label class="field">
+                <span>生成侧重点</span>
+                <select id="aiLensSelect">
+                  <option value="auto">自动判断</option>
+                  <option value="narrative">更叙事</option>
+                  <option value="sensory">更感官</option>
+                  <option value="science">更科普</option>
+                  <option value="imagination">更想象</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>写作目标</span>
+                <select id="aiGoalSelect">
+                  <option value="story">短故事</option>
+                  <option value="observation">观察日记</option>
+                  <option value="science">小观察记录</option>
+                  <option value="narrative">叙事作文</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>表达语气</span>
+                <select id="aiToneSelect">
+                  <option value="gentle">温柔鼓励</option>
+                  <option value="curious">更有探究感</option>
+                  <option value="mature">更成熟一点</option>
+                  <option value="playful">更有画面感</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>问题深度</span>
+                <select id="aiDepthSelect">
+                  <option value="light">轻一点</option>
+                  <option value="balanced">平衡</option>
+                  <option value="deep">更深入</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="ai-actions">
+              <button class="button button-primary" id="generateAiButton" type="button">AI 重新生成整页</button>
+              <button class="button button-secondary" id="reloadFromTurnButton" type="button">重新读取当前会话</button>
+              <button class="button button-ghost" id="restoreOriginalButton" type="button">恢复设备原版</button>
+            </div>
+          </section>
+
+          <aside class="ai-preview">
+            <div class="ai-preview-box">
+              <p class="mini-label">AI 调整策略</p>
+              <div class="strategy-list" id="aiStrategyList"></div>
+            </div>
+
+            <div class="ai-preview-box">
+              <p class="mini-label">设备端可选追问</p>
+              <div class="question-variants" id="aiQuestionVariants"></div>
+            </div>
+
+            <div class="ai-preview-box">
+              <p class="mini-label">AI 本轮会改动什么</p>
+              <div class="ai-summary" id="aiSummary"></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <section class="card timeline-panel" id="timeline">
+          <div class="panel-head">
+            <div>
+              <p class="section-kicker">01 / 观察时间线</p>
+              <h3>LS26 户外会话同步记录</h3>
+            </div>
+            <div class="panel-meta" id="sessionMeta"></div>
+          </div>
+          <div class="timeline" id="timelineList"></div>
+        </section>
+
+        <section class="card observation-panel">
+          <div class="panel-head">
+            <div>
+              <p class="section-kicker">02 / 观察卡</p>
+              <h3>平台整理出的观察素材</h3>
+            </div>
+          </div>
+
+          <div class="observation-card" id="observationCard"></div>
+
+          <div class="sync-table-wrap">
+            <h4>同步到平台的原始字段</h4>
+            <div class="sync-table" id="syncFields"></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="studio-grid">
+        <section class="card blocks-panel">
+          <div class="panel-head">
+            <div>
+              <p class="section-kicker">03 / 故事积木</p>
+              <h3>从观察记录自动拆出的叙事块</h3>
+            </div>
+            <button class="button button-ghost" id="resetCanvasButton">恢复推荐组合</button>
+          </div>
+
+          <div class="blocks-layout">
+            <div>
+              <p class="mini-label">可选积木</p>
+              <div class="block-library" id="blockLibrary"></div>
+            </div>
+            <div>
+              <p class="mini-label">我的故事画布</p>
+              <div class="story-canvas" id="storyCanvas"></div>
+              <div class="ai-hint" id="canvasHint"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card writing-panel" id="studio">
+          <div class="panel-head">
+            <div>
+              <p class="section-kicker">04 / 写作工作台</p>
+              <h3>观察记录如何变成提纲和短作文</h3>
+            </div>
+            <div class="panel-meta writing-meta">
+              <div id="apiStatusText">当前显示本地模板生成结果。接入 API 后可切换为真实模型生成。</div>
+              <div class="writing-actions">
+                <label class="writing-wordcount">
+                  <span>目标字数</span>
+                  <select id="writingWordCountSelect">
+                    <option value="200">200 字</option>
+                    <option value="300" selected>300 字</option>
+                    <option value="500">500 字</option>
+                  </select>
+                </label>
+                <button class="button button-primary" id="generateApiDraftButton" type="button">用 DeepSeek 生成作文</button>
+                <button class="button button-secondary" id="regenerateApiDraftButton" type="button">重新生成</button>
+                <button class="button button-secondary" id="copyDraftButton" type="button">复制作文</button>
+                <button class="button button-secondary" id="downloadDraftButton" type="button">下载 TXT</button>
+                <button class="button button-ghost" id="clearApiDraftButton" type="button">回到本地模板</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="writing-layout">
+            <article class="writing-box">
+              <p class="mini-label">观察记录</p>
+              <div id="writingNotes"></div>
+            </article>
+            <article class="writing-box">
+              <p class="mini-label">写作提纲</p>
+              <div id="writingOutline"></div>
+            </article>
+            <article class="writing-box writing-box-large">
+              <p class="mini-label">短作文草稿</p>
+              <div class="writing-draft-meta" id="writingDraftMeta"></div>
+              <div id="writingDraft"></div>
+            </article>
+            <article class="writing-box">
+              <p class="mini-label">AI 写作教练建议</p>
+              <div id="writingCoach"></div>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,10 +1,18 @@
 #!/bin/bash
-set -e
+set -u
 
-PROJECT_DIR="/Users/yuanshuyi/Documents/AI Edu"
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+
+PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PORT="4173"
 
 cd "$PROJECT_DIR"
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "无法启动：没有找到 Node.js。"
+  read -r -p "按回车键关闭窗口..."
+  exit 1
+fi
 
 if lsof -nP -iTCP:$PORT -sTCP:LISTEN >/dev/null 2>&1; then
   echo "LAN share server is already running on port $PORT"
